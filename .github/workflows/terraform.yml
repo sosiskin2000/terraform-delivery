@@ -44,7 +44,7 @@
 
 name: 'Terraform'
 
-on:
+obcccntjlhitkn:
   push:
     branches:
     - main
@@ -71,6 +71,13 @@ jobs:
       uses: hashicorp/setup-terraform@v1
       with:
         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+    - name: Create access key
+      run: 'mkdir -p credentials && echo "[default]" > credentials/terraform-states_bucket_credentials && echo "aws_access_key_id = $ACCESS_LOGIN" >> credentials/terraform-states_bucket_credentials  && echo "aws_access_key_id = $ACCESS_KEY" >> credentials/terraform-states_bucket_credentials'
+      shell: bash
+      env:
+        ACCESS_LOGIN: ${{secrets.ACCESS_LOGIN}}  
+        ACCESS_KEY: ${{secrets.ACCESS_KEY}}      
 
     - name: Create pem key    
       run: 'echo "$PEM_KEY" > key.pem'
