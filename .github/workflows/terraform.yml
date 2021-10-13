@@ -107,18 +107,48 @@ jobs:
     - name: Terraform Validate
       id: validate
       run: terraform validate -no-color
+    
+    - id: validate_out
+      if: always()
+      run: echo ${{ steps.validate.outputs.stdout }}
 
     # Generates an execution plan for Terraform
     - name: Terraform Plan
       id: plan
       run: terraform plan 
+      if: github.event_name == 'pull_request'
       continue-on-error: true
 
     # Generates an execution plan for Terraform
-    - name: Terraform Plan
-      id: plan
-      run: terraform plan
-      continue-on-error: true
+    - name: GitHub Script
+      uses: actions/github-script@v5.0.0
+      if: github.event_name == 'pull_request'
+      env:
+        PLAN: "terraform\n${{step.plan.outputs.stdout}}"    
+        VALIDATE: "${{ steps.validate_out.outputs.stdout }}"
+      with:
+         script: |
+                      const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+                      #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+                      #### Terraform Validation 🤖${{ steps.validate.outcome }}
+
+                      <details><summary>Show</summary>\`\`\`${process.env.VALIDATE}\`\`\`</details>
+
+                      #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+
+                      <details><summary>Show</summary>\`\`\`${process.env.PLAN}\`\`\`</details>
+
+                      *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
+
+                      github.issues.createComment({
+                        issue_number: context.issue.number,
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        body: output
+                      })   
+      
+      
+      
       
 
       # On push to main, build or change infrastructure according to Terraform configuration files
