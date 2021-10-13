@@ -33,42 +33,42 @@ provider "oci" {
 }
 #########################
 # Initial commit code
-#data "oci_objectstorage_namespace" "ns" {}
-#
-#output namespace {
-#  value = data.oci_objectstorage_namespace.ns.namespace
-#}
-#
-#resource "oci_objectstorage_namespace_metadata" "namespace-metadata" {
-#  namespace                    = data.oci_objectstorage_namespace.ns.namespace
-#  default_s3compartment_id     = var.tenancy_ocid
-#  default_swift_compartment_id = var.tenancy_ocid
-#}
-#
-#data oci_objectstorage_namespace_metadata namespace-metadata {
-#  namespace = data.oci_objectstorage_namespace.ns.namespace
-#}
+data "oci_objectstorage_namespace" "ns" {}
 
-#output namespace-metadata {
-#  value = <<EOF
-#
-#  namespace = ${data.oci_objectstorage_namespace_metadata.namespace-metadata.namespace}
-#  default_s3compartment_id = ${data.oci_objectstorage_namespace_metadata.namespace-metadata.default_s3compartment_id}
-#  default_swift_compartment_id = ${data.oci_objectstorage_namespace_metadata.namespace-metadata.default_swift_compartment_id}
-#EOF
-#}
-#resource "oci_objectstorage_bucket" "bucket" {
-#    count          = 1
-#    #Required
-#    compartment_id = var.tenancy_ocid
-#    name           = "terraform-backend"
-#    namespace     = data.oci_objectstorage_namespace.ns.namespace
-#    access_type    = "NoPublicAccess"
+output namespace {
+  value = data.oci_objectstorage_namespace.ns.namespace
+}
 
-#    lifecycle {
-#       prevent_destroy = true
-#    }
-#}
+resource "oci_objectstorage_namespace_metadata" "namespace-metadata" {
+  namespace                    = data.oci_objectstorage_namespace.ns.namespace
+  default_s3compartment_id     = var.tenancy_ocid
+  default_swift_compartment_id = var.tenancy_ocid
+}
+
+data oci_objectstorage_namespace_metadata namespace-metadata {
+  namespace = data.oci_objectstorage_namespace.ns.namespace
+}
+
+output namespace-metadata {
+  value = <<EOF
+
+  namespace = ${data.oci_objectstorage_namespace_metadata.namespace-metadata.namespace}
+  default_s3compartment_id = ${data.oci_objectstorage_namespace_metadata.namespace-metadata.default_s3compartment_id}
+  default_swift_compartment_id = ${data.oci_objectstorage_namespace_metadata.namespace-metadata.default_swift_compartment_id}
+EOF
+}
+resource "oci_objectstorage_bucket" "bucket" {
+    count          = 1
+    #Required
+    compartment_id = var.tenancy_ocid
+    name           = "terraform-backend"
+    namespace     = data.oci_objectstorage_namespace.ns.namespace
+    access_type    = "NoPublicAccess"
+
+    lifecycle {
+       prevent_destroy = true
+    }
+}
 #locals {
 #  backend_cfg_content = <<-EOF
 #endpoint="https://${data.oci_objectstorage_namespace.ns.namespace}.compat.objectstorage.${var.region}.oraclecloud.com"
