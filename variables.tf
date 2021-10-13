@@ -170,7 +170,7 @@ variable "instance_ad_number" {
 variable "instance_count" {
   description = "Number of identical instances to launch from a single module."
   type        = number
-  default     = 0 
+  default     = 0
 }
 
 variable "instance_display_name" {
