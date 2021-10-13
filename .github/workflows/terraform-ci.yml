@@ -35,20 +35,20 @@ jobs:
         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
     - name: Create access key
-      run: 'mkdir -p ../credentials && echo "[default]" > ../credentials/terraform-states_bucket_credentials && echo "aws_access_key_id = $LOGIN" >> ../credentials/terraform-states_bucket_credentials  && echo "aws_secret_access_key = $KEY" >> ../credentials/terraform-states_bucket_credentials'
+      run: 'mkdir -p ../../credentials && echo "[default]" > ../../credentials/terraform-states_bucket_credentials && echo "aws_access_key_id = $LOGIN" >> ../../credentials/terraform-states_bucket_credentials  && echo "aws_secret_access_key = $KEY" >> ../../credentials/terraform-states_bucket_credentials'
       shell: bash
       env:
         LOGIN: ${{secrets.ACCESS_LOGIN}}  
         KEY: ${{secrets.ACCESS_KEY}}      
 
     - name: Create pem key    
-      run: 'echo "$PEM_KEY" > ../key.pem'
+      run: 'echo "$PEM_KEY" > ../../key.pem'
       shell: bash
       env:
         PEM_KEY: ${{secrets.PEM_KEY}}
 
     - name: Create ssh key
-      run: 'echo "$SSH_KEY" > ../authorized_keys'
+      run: 'echo "$SSH_KEY" > ../../authorized_keys'
       shell: bash
       env:
         SSH_KEY: ${{secrets.AUTHORIZED_KEYS}}    
