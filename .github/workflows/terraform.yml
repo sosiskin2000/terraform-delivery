@@ -39,13 +39,13 @@ jobs:
         KEY: ${{secrets.ACCESS_KEY}}      
 
     - name: Create pem key    
-      run: 'echo "$PEM_KEY" > key.pem'
+      run: 'echo "$PEM_KEY" > ../key.pem'
       shell: bash
       env:
         PEM_KEY: ${{secrets.PEM_KEY}}
 
     - name: Create ssh key
-      run: 'echo "$SSH_KEY" > authorized_keys'
+      run: 'echo "$SSH_KEY" > ../authorized_keys'
       shell: bash
       env:
         SSH_KEY: ${{secrets.AUTHORIZED_KEYS}}    
