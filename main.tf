@@ -58,7 +58,7 @@ output "namespace-metadata" {
 EOF
 }
 resource "oci_objectstorage_bucket" "bucket" {
-  count = 1
+  count          = 1
   compartment_id = var.tenancy_ocid
   name           = "terraform-backend"
   namespace      = data.oci_objectstorage_namespace.ns.namespace
@@ -71,10 +71,10 @@ resource "oci_objectstorage_bucket" "bucket" {
 
 
 module "vcn" {
-  source = "./modules/vcn"
-  compartment_id = var.compartment_id
-  label_prefix   = var.label_prefix
-  tags           = var.tags
+  source                   = "./modules/vcn"
+  compartment_id           = var.compartment_id
+  label_prefix             = var.label_prefix
+  tags                     = var.tags
   create_drg               = var.create_drg
   internet_gateway_enabled = var.internet_gateway_enabled
   lockdown_default_seclist = var.lockdown_default_seclist
@@ -83,7 +83,7 @@ module "vcn" {
   vcn_cidr                 = var.vcn_cidr
   vcn_dns_label            = var.vcn_dns_label
   vcn_name                 = var.vcn_name
-  drg_display_name = var.drg_display_name
+  drg_display_name         = var.drg_display_name
 }
 
 module "subnets" {
@@ -96,32 +96,32 @@ module "subnets" {
 }
 
 module "instance_pltfe" {
-  source = "./modules/compute-instance"
-  compartment_ocid = var.compartment_id
-  ad_number             = var.instance_ad_number
-  instance_count        = var.instance_count
-  instance_display_name = var.instance_display_name
-  shape                 = var.shape
-  source_ocid           = var.source_ocid
-  source_type           = var.source_type
-  ssh_authorized_keys = var.ssh_authorized_keys
-  assign_public_ip = var.assign_public_ip
-  subnet_ocids     = [module.subnets.web_net_id]
+  source                     = "./modules/compute-instance"
+  compartment_ocid           = var.compartment_id
+  ad_number                  = var.instance_ad_number
+  instance_count             = var.instance_count
+  instance_display_name      = var.instance_display_name
+  shape                      = var.shape
+  source_ocid                = var.source_ocid
+  source_type                = var.source_type
+  ssh_authorized_keys        = var.ssh_authorized_keys
+  assign_public_ip           = var.assign_public_ip
+  subnet_ocids               = [module.subnets.web_net_id]
   block_storage_sizes_in_gbs = var.block_storage_sizes_in_gbs
 }
 
 module "instance_bastion" {
-  source = "./modules/compute-instance"
-  compartment_ocid = var.compartment_id
-  ad_number             = var.instance_ad_number
-  instance_count        = var.instance_count
-  instance_display_name = var.instance_display_name
-  shape                 = var.shape
-  source_ocid           = var.source_ocid
-  source_type           = var.source_type
-  ssh_authorized_keys = var.ssh_authorized_keys
-  assign_public_ip = var.assign_public_ip
-  subnet_ocids     = [module.subnets.bastion_net_id]
+  source                     = "./modules/compute-instance"
+  compartment_ocid           = var.compartment_id
+  ad_number                  = var.instance_ad_number
+  instance_count             = var.instance_count
+  instance_display_name      = var.instance_display_name
+  shape                      = var.shape
+  source_ocid                = var.source_ocid
+  source_type                = var.source_type
+  ssh_authorized_keys        = var.ssh_authorized_keys
+  assign_public_ip           = var.assign_public_ip
+  subnet_ocids               = [module.subnets.bastion_net_id]
   block_storage_sizes_in_gbs = var.block_storage_sizes_in_gbs
 }
 
