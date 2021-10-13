@@ -13,7 +13,7 @@ terraform {
     key      = "networking/terraform.tfstate"
     region               = "uk-london-1" 
     endpoint = "https://lrgrvdnxqvyn.compat.objectstorage.uk-london-1.oraclecloud.com" 
-    shared_credentials_file     = "../terraform-states_bucket_credentials"
+    shared_credentials_file     = "credentials/terraform-states_bucket_credentials"
     skip_region_validation      = true
     skip_credentials_validation = true
     skip_metadata_api_check     = true
@@ -22,7 +22,6 @@ terraform {
 
 
 }
-
 
 provider "oci" {
   tenancy_ocid         = var.tenancy_id
