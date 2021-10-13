@@ -74,7 +74,7 @@ jobs:
 
     - name: Create access key
 #      run: 'mkdir -p credentials && echo "[default]" > credentials/terraform-states_bucket_credentials && echo "aws_access_key_id = $ACCESS_LOGIN" >> credentials/terraform-states_bucket_credentials  && echo "aws_access_key_id = $ACCESS_KEY" >> credentials/terraform-states_bucket_credentials'
-      run: 'mkdir -p credentials && echo "$KEY" && echo "[default]" > credentials/terraform-states_bucket_credentials && echo "aws_access_key_id = $LOGIN" >> credentials/terraform-states_bucket_credentials  && echo "aws_secret_access_key = $KEY" >> credentials/terraform-states_bucket_credentials && cat credentials/terraform-states_bucket_credentials'
+      run: 'mkdir -p credentials && echo "[default]" > credentials/terraform-states_bucket_credentials && echo "aws_access_key_id = $LOGIN" >> credentials/terraform-states_bucket_credentials  && echo "aws_secret_access_key = $KEY" >> credentials/terraform-states_bucket_credentials'
       shell: bash
       env:
         LOGIN: ${{secrets.ACCESS_LOGIN}}  
