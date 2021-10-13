@@ -124,7 +124,7 @@ jobs:
       uses: actions/github-script@v5.0.0
       if: github.event_name == 'pull_request'
       env:
-        PLAN: "terraform\n${{step.plan.outputs.stdout}}"    
+        PLAN: "terraform\n${{steps.plan.outputs.stdout}}"    
         VALIDATE: "${{ steps.validate_out.outputs.stdout }}"
       with:
          script: |
