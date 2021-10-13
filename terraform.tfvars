@@ -1,6 +1,6 @@
 # provider identity parameters
 api_fingerprint      = "38:32:0a:84:2b:b6:07:c6:57:99:b5:b9:67:74:66:1e"
-api_private_key_path = "/home/opc/.oci/anton.guts2021-03-11-06-24.pem"
+api_private_key_path = "key.pem"
 region               = "uk-london-1"
 homeregion           = "uk-london-1"
 tenancy_id           = "ocid1.tenancy.oc1..aaaaaaaakgbcacu75hezk4aovg6q5psc37ezdcwhc4whwri3ow4khb6xbtdq"
