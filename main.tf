@@ -35,7 +35,7 @@ provider "oci" {
 # Initial commit code
 data "oci_objectstorage_namespace" "ns" {}
 
-output namespace {
+output "namespace" {
   value = data.oci_objectstorage_namespace.ns.namespace
 }
 
@@ -45,11 +45,11 @@ resource "oci_objectstorage_namespace_metadata" "namespace-metadata" {
   default_swift_compartment_id = var.tenancy_ocid
 }
 
-data oci_objectstorage_namespace_metadata namespace-metadata {
+data "oci_objectstorage_namespace_metadata" "namespace-metadata" {
   namespace = data.oci_objectstorage_namespace.ns.namespace
 }
 
-output namespace-metadata {
+output "namespace-metadata" {
   value = <<EOF
 
   namespace = ${data.oci_objectstorage_namespace_metadata.namespace-metadata.namespace}
@@ -58,16 +58,16 @@ output namespace-metadata {
 EOF
 }
 resource "oci_objectstorage_bucket" "bucket" {
-    count          = 1
-    #Required
-    compartment_id = var.tenancy_ocid
-    name           = "terraform-backend"
-    namespace     = data.oci_objectstorage_namespace.ns.namespace
-    access_type    = "NoPublicAccess"
+  count = 1
+  #Required
+  compartment_id = var.tenancy_ocid
+  name           = "terraform-backend"
+  namespace      = data.oci_objectstorage_namespace.ns.namespace
+  access_type    = "NoPublicAccess"
 
-    lifecycle {
-       prevent_destroy = true
-    }
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 #locals {
 #  backend_cfg_content = <<-EOF

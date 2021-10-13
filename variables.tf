@@ -15,17 +15,17 @@ variable "api_private_key_path" {
 }
 
 variable "region" {
- description = "the oci region where resources will be created"
- type        = string
- # no default value, asking user to explicitly set this variable's value. see codingconventions.adoc
- # List of regions: https://docs.cloud.oracle.com/iaas/Content/General/Concepts/regions.htm#ServiceAvailabilityAcrossRegions
+  description = "the oci region where resources will be created"
+  type        = string
+  # no default value, asking user to explicitly set this variable's value. see codingconventions.adoc
+  # List of regions: https://docs.cloud.oracle.com/iaas/Content/General/Concepts/regions.htm#ServiceAvailabilityAcrossRegions
 }
 
 variable "homeregion" {
- description = "the oci region where resources will be created"
- type        = string
- # no default value, asking user to explicitly set this variable's value. see codingconventions.adoc
- # List of regions: https://docs.cloud.oracle.com/iaas/Content/General/Concepts/regions.htm#ServiceAvailabilityAcrossRegions
+  description = "the oci region where resources will be created"
+  type        = string
+  # no default value, asking user to explicitly set this variable's value. see codingconventions.adoc
+  # List of regions: https://docs.cloud.oracle.com/iaas/Content/General/Concepts/regions.htm#ServiceAvailabilityAcrossRegions
 }
 
 variable "tenancy_id" {
@@ -108,7 +108,7 @@ variable "iam_users" {
 
 variable "compartments" {
   description = "Compartment data"
-  type        = map
+  type        = map(any)
 }
 
 variable "iam_policy_statements" {
@@ -149,7 +149,7 @@ variable "netnum" {
     bastion = 32
     web     = 16
   }
-  type = map
+  type = map(any)
 }
 
 variable "newbits" {
@@ -158,7 +158,7 @@ variable "newbits" {
     bastion = 13
     web     = 11
   }
-  type = map
+  type = map(any)
 }
 
 variable "instance_ad_number" {
@@ -238,8 +238,8 @@ variable "subnet_ocids_web" {
 variable "block_storage_sizes_in_gbs" {
   description = "Sizes of volumes to create and attach to each instance."
   type        = list(string)
-#  default     = [0]
-#  default     = null
-  default     = [50]
+  #  default     = [0]
+  #  default     = null
+  default = [50]
 }
 
