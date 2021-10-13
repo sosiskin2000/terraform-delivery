@@ -1,1 +1,1 @@
-# teraform-delivery
+# terform-delivery
