@@ -5,7 +5,7 @@ on:
     branches:
     - main
     paths:
-    - 'backend/++'
+    - 'backend/**'
   pull_request:
 
 jobs:
@@ -37,6 +37,13 @@ jobs:
       env:
         LOGIN: ${{secrets.ACCESS_LOGIN}}  
         KEY: ${{secrets.ACCESS_KEY}}      
+
+    - name: Create access key
+      run: 'mkdir -p backend/credentials && echo "[default]" > backend/credentials/terraform-states_bucket_credentials && echo "aws_access_key_id = $LOGIN" >> backend/credentials/terraform-states_bucket_credentials  && echo "aws_secret_access_key = $KEY" >> backend/credentials/terraform-states_bucket_credentials && ls -all /backend/ && cat backend/credentials/terraform-states_bucket_credentials'
+      shell: bash
+      env:
+        LOGIN: ${{secrets.ACCESS_LOGIN}}
+        KEY: ${{secrets.ACCESS_KEY}}        
 
     - name: Create pem key    
       run: 'echo "$PEM_KEY" > key.pem'
