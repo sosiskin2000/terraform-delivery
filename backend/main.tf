@@ -32,7 +32,6 @@ provider "oci" {
   disable_auto_retries = false
 }
 #########################
-# Initial commit code
 data "oci_objectstorage_namespace" "ns" {}
 
 output "namespace" {
