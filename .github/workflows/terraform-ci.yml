@@ -1,0 +1,123 @@
+name: 'Terraform CI/CD'
+
+on:
+  push:
+    branches:
+    - main
+    paths:
+    - 'networking/vcn/**'
+    - 'networking/instances/**'
+  pull_request:
+
+jobs:
+  terraform:
+    strategy:
+      max-parallel: 1
+      matrix: 
+        tf_actions_working_dir: ['networking/vcn', 'networking/instances']
+    name: 'Terraform'
+    runs-on: ubuntu-latest
+    environment: production
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+#        shell: bash
+         working-directory: ${{ matrix.tf_actions_working_dir }}
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+    - name: Create access key
+      run: 'mkdir -p ../../credentials && echo "[default]" > ../../credentials/terraform-states_bucket_credentials && echo "aws_access_key_id = $LOGIN" >> ../../credentials/terraform-states_bucket_credentials  && echo "aws_secret_access_key = $KEY" >> ../../credentials/terraform-states_bucket_credentials'
+      shell: bash
+      env:
+        LOGIN: ${{secrets.ACCESS_LOGIN}}  
+        KEY: ${{secrets.ACCESS_KEY}}      
+
+    - name: Create pem key    
+      run: 'echo "$PEM_KEY" > ../../key.pem'
+      shell: bash
+      env:
+        PEM_KEY: ${{secrets.PEM_KEY}}
+
+    - name: Create ssh key
+      run: 'echo "$SSH_KEY" > ../../authorized_keys'
+      shell: bash
+      env:
+        SSH_KEY: ${{secrets.AUTHORIZED_KEYS}}    
+
+    # Checks that all Terraform configuration files adhere to a canonical format
+    - name: Terraform Format
+      id: fmt
+      run: terraform fmt -check
+      continue-on-error: true
+
+    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+    - name: Terraform Init
+      id: init
+      run: terraform init
+
+    # Terraform Validate
+    - name: Terraform Validate
+      id: validate
+      run: terraform validate -no-color
+    
+    - id: validate_out
+      if: always()
+      run: echo ${{ steps.validate.outputs.stdout }}
+
+    # Generates an execution plan for Terraform
+    - name: Terraform Plan
+      id: plan
+      run: terraform plan 
+      if: github.event_name == 'pull_request'
+      continue-on-error: true
+
+    # Generates an execution plan for Terraform
+    - name: GitHub Script
+      uses: actions/github-script@v5
+      if: github.event_name == 'pull_request'
+      env:
+        PLAN: "${{ steps.plan.outputs.stdout }}"
+        VALIDATE: "${{ steps.validate_out.outputs.stdout }}"
+      with:
+         github-token: ${{ secrets.GITHUB_TOKEN }}
+         result-encoding: string
+         script: |
+                      const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+                      #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+                      #### Terraform Validation 🤖${{ steps.validate.outcome }}
+                      #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+
+                      <details><summary>Show Plan</summary>
+                      \`\`\`${process.env.PLAN}\`\`\`</details>
+                      
+                      Results for commit: ${{ github.event.pull_request.head.sha }}
+
+                      *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ matrix.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
+                      
+                      github.rest.issues.createComment({
+                        issue_number: context.issue.number,
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        body: output
+                      })   
+      
+      
+    # Generates an execution plan for Terraform
+    - name: Terraform Plan status
+      run: exit 1
+      if: steps.plan.outcome == 'failure'
+
+      # On push to main, build or change infrastructure according to Terraform configuration files
+      # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
+    - name: Terraform Apply
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      run: terraform apply -auto-approve
