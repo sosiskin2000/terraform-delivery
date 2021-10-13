@@ -9,10 +9,10 @@ terraform {
     }
   }
   backend "s3" {
-    bucket   = "terraform-backend"
-    key      = "networking/terraform.tfstate"
-    region               = "uk-london-1" 
-    endpoint = "https://lrgrvdnxqvyn.compat.objectstorage.uk-london-1.oraclecloud.com" 
+    bucket                      = "terraform-backend"
+    key                         = "networking/terraform.tfstate"
+    region                      = "uk-london-1"
+    endpoint                    = "https://lrgrvdnxqvyn.compat.objectstorage.uk-london-1.oraclecloud.com"
     shared_credentials_file     = "credentials/terraform-states_bucket_credentials"
     skip_region_validation      = true
     skip_credentials_validation = true
@@ -147,21 +147,21 @@ provider "oci" {
 
 
 
- module "vcn" {
-   # general oci parameters
-   source = "./modules/vcn" 
+module "vcn" {
+  # general oci parameters
+  source = "./modules/vcn"
 
-   compartment_id          = var.compartment_id 
-   label_prefix   = var.label_prefix
-   tags           = var.tags
+  compartment_id = var.compartment_id
+  label_prefix   = var.label_prefix
+  tags           = var.tags
 
-   # vcn parameters
-   create_drg               = var.create_drg
-   internet_gateway_enabled = var.internet_gateway_enabled
-   lockdown_default_seclist = var.lockdown_default_seclist
-   nat_gateway_enabled      = var.nat_gateway_enabled
-   service_gateway_enabled  = var.service_gateway_enabled
-   vcn_cidr                 = var.vcn_cidr
+  # vcn parameters
+  create_drg               = var.create_drg
+  internet_gateway_enabled = var.internet_gateway_enabled
+  lockdown_default_seclist = var.lockdown_default_seclist
+  nat_gateway_enabled      = var.nat_gateway_enabled
+  service_gateway_enabled  = var.service_gateway_enabled
+  vcn_cidr                 = var.vcn_cidr
   vcn_dns_label            = var.vcn_dns_label
   vcn_name                 = var.vcn_name
 
@@ -170,12 +170,12 @@ provider "oci" {
 }
 
 module "subnets" {
-  source = "./modules/subnets"
-  vcn_id = module.vcn.vcn_id
-  ig_route_id = module.vcn.ig_route_id
-  compartment_id = var.compartment_id 
-  netnum  = var.netnum
-  newbits = var.newbits
+  source         = "./modules/subnets"
+  vcn_id         = module.vcn.vcn_id
+  ig_route_id    = module.vcn.ig_route_id
+  compartment_id = var.compartment_id
+  netnum         = var.netnum
+  newbits        = var.newbits
 }
 
 module "instance_pltfe" {
@@ -193,7 +193,7 @@ module "instance_pltfe" {
   ssh_authorized_keys = var.ssh_authorized_keys
   # networking parameters
   assign_public_ip = var.assign_public_ip
-  subnet_ocids     = [module.subnets.web_net_id] 
+  subnet_ocids     = [module.subnets.web_net_id]
   # storage parameters
   block_storage_sizes_in_gbs = var.block_storage_sizes_in_gbs
 }
@@ -202,7 +202,7 @@ module "instance_bastion" {
   source = "./modules/compute-instance"
   # general oci parameters
   compartment_ocid = var.compartment_id
- # compute instance parameters
+  # compute instance parameters
   ad_number             = var.instance_ad_number
   instance_count        = var.instance_count
   instance_display_name = var.instance_display_name
@@ -214,7 +214,7 @@ module "instance_bastion" {
   # networking parameters
   assign_public_ip = var.assign_public_ip
   subnet_ocids     = [module.subnets.bastion_net_id]
-# storage parameters
+  # storage parameters
   block_storage_sizes_in_gbs = var.block_storage_sizes_in_gbs
 }
 
