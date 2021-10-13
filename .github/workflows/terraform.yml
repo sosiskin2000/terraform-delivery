@@ -1,9 +1,11 @@
-name: 'Terraform'
+name: 'Terraform CI/CD backend'
 
 on:
   push:
     branches:
     - main
+    paths:
+    - 'backend/++'
   pull_request:
 
 jobs:
@@ -11,12 +13,13 @@ jobs:
     name: 'Terraform'
     runs-on: ubuntu-latest
     environment: production
-
+    env:
+       working-directory: backend
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
       run:
-        shell: bash
-
+#        shell: bash
+         working-directory: ${{ env.working-directory }}
     steps:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
@@ -29,7 +32,6 @@ jobs:
         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
     - name: Create access key
-#      run: 'mkdir -p credentials && echo "[default]" > credentials/terraform-states_bucket_credentials && echo "aws_access_key_id = $ACCESS_LOGIN" >> credentials/terraform-states_bucket_credentials  && echo "aws_access_key_id = $ACCESS_KEY" >> credentials/terraform-states_bucket_credentials'
       run: 'mkdir -p credentials && echo "[default]" > credentials/terraform-states_bucket_credentials && echo "aws_access_key_id = $LOGIN" >> credentials/terraform-states_bucket_credentials  && echo "aws_secret_access_key = $KEY" >> credentials/terraform-states_bucket_credentials'
       shell: bash
       env:
@@ -96,7 +98,7 @@ jobs:
                       
                       Results for commit: ${{ github.event.pull_request.head.sha }}
 
-                      *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Workflow: \`${{ github.workflow }}\`*`;
+                      *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.working-directory }}\`, Workflow: \`${{ github.workflow }}\`*`;
                       
                       github.rest.issues.createComment({
                         issue_number: context.issue.number,
