@@ -72,11 +72,17 @@ jobs:
       with:
         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-    - name: Create key   
-      run: 'echo "$SSH_KEY" > key.pem'
+    - name: Create pem key    
+      run: 'echo "$PEM_KEY" > key.pem'
       shell: bash
       env:
-        SSH_KEY: ${{secrets.PEM_KEY}}
+        PEM_KEY: ${{secrets.PEM_KEY}}
+
+    - name: Create ssh key
+      run: 'echo "$SSH_KEY" > authorized_keys'
+      shell: bash
+      env:
+        SSH_KEY: ${{secrets.AUTHORIZED_KEYS}}    
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init

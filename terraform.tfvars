@@ -68,7 +68,7 @@ newbits = {
 source_ocid = "ocid1.image.oc1.uk-london-1.aaaaaaaale63qnlvsxbcczr6wipotgxq6x7ccj7efdovifxzkcvzc6j3jd4a"
 
 # operating system parameters
-ssh_authorized_keys = "/home/opc/.ssh/authorized_keys"
+ssh_authorized_keys = "authorized_keys"
 
 # networking parameters
 subnet_ocids_bastion = ["ocid1.subnet.oc1.uk-london-1.aaaaaaaahnvm2lnclb7ngff7t6fopgv4z4wtpykgj3gsc6cfzcv6vkgw6f5q"]
