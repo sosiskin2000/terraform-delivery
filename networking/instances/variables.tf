@@ -54,6 +54,11 @@ variable "compartment_id" {
   # no default value, asking user to explicitly set this variable's value. see codingconventions.adoc
 }
 
+variable "comp_temp" {
+  description = "compartment id where to create all resources"
+  type        = string
+  # no default value, asking user to explicitly set this variable's value. see codingconventions.adoc
+}
 variable "label_prefix" {
   description = "a string that will be prepended to all resources"
   type        = string

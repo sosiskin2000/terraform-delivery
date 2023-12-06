@@ -9,6 +9,8 @@ user_id              = "ocid1.user.oc1..aaaaaaaanjro5wkf6gurnelsaourcj24zb3swgdh
 
 # general oci parameters
 compartment_id = "ocid1.tenancy.oc1..aaaaaaaakgbcacu75hezk4aovg6q5psc37ezdcwhc4whwri3ow4khb6xbtdq"
+
+comp_temp = "ocid1.compartment.oc1..aaaaaaaaig73yt3xvfshswhpf6puqjsxbsur4kip5fqo6bezzsjcpr4ebmoq"
 compartments = {
   "some_dev_mgmt" = { desc = "compartment for MGMT" },
   "some_dev_app"  = { desc = "compartment for App" }
