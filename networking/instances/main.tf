@@ -12,12 +12,13 @@ terraform {
     bucket                      = "terraform-backend"
     key                         = "networking/instances/terraform.tfstate"
     region                      = "uk-london-1"
-    endpoint                    = "https://lrgrvdnxqvyn.compat.objectstorage.uk-london-1.oraclecloud.com"
-    shared_credentials_file     = "../../credentials/terraform-states_bucket_credentials"
+    endpoints                   = { s3 = "https://lrgrvdnxqvyn.compat.objectstorage.uk-london-1.oraclecloud.com" }
+    shared_credentials_files    = ["../../credentials/terraform-states_bucket_credentials"]
     skip_region_validation      = true
     skip_credentials_validation = true
     skip_metadata_api_check     = true
-    force_path_style            = true
+    use_path_style              = true
+    skip_requesting_account_id  = true
   }
 
 
@@ -38,12 +39,13 @@ data "terraform_remote_state" "vcn" {
     bucket                      = "terraform-backend"
     key                         = "networking/vcn/terraform.tfstate"
     region                      = "uk-london-1"
-    endpoint                    = "https://lrgrvdnxqvyn.compat.objectstorage.uk-london-1.oraclecloud.com"
-    shared_credentials_file     = "../../credentials/terraform-states_bucket_credentials"
+    endpoints                   = { s3 = "https://lrgrvdnxqvyn.compat.objectstorage.uk-london-1.oraclecloud.com" }
+    shared_credentials_files    = ["../../credentials/terraform-states_bucket_credentials"]
     skip_region_validation      = true
     skip_credentials_validation = true
     skip_metadata_api_check     = true
-    force_path_style            = true
+    use_path_style              = true
+    skip_requesting_account_id  = true
   }
 }
 
