@@ -49,7 +49,7 @@ data "terraform_remote_state" "vcn" {
 
 module "instance_pltfe" {
   source                     = "./modules/compute-instance"
-  compartment_ocid           = var.compartment_id
+  compartment_ocid           = var.comp_temp
   ad_number                  = var.instance_ad_number
   instance_count             = var.instance_count
   instance_display_name      = var.instance_display_name
