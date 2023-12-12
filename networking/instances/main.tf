@@ -17,6 +17,7 @@ terraform {
     skip_region_validation      = true
     skip_credentials_validation = true
     skip_metadata_api_check     = true
+    skip_s3_checksum            = true
     use_path_style              = true
     skip_requesting_account_id  = true
   }
@@ -49,25 +50,26 @@ data "terraform_remote_state" "vcn" {
   }
 }
 
+
 module "instance_pltfe" {
-  source                     = "./modules/compute-instance"
-  compartment_ocid           = var.comp_temp
-  ad_number                  = var.instance_ad_number
-  instance_count             = var.instance_count
-  instance_display_name      = var.instance_display_name
-  shape                      = var.shape
-  source_ocid                = var.source_ocid
-  source_type                = var.source_type
-  ssh_authorized_keys        = var.ssh_authorized_keys
-  assign_public_ip           = var.assign_public_ip
-  subnet_ocids               = [data.terraform_remote_state.vcn.outputs.subnet_wev_ids.web_net_id]
-  block_storage_sizes_in_gbs = var.block_storage_sizes_in_gbs
+ source                     = "./modules/compute-instance"
+ compartment_ocid           = var.comp_temp
+ ad_number                  = var.ad_number
+ instance_count             = var.instance_count
+ instance_display_name      = var.instance_display_name
+ shape                      = var.shape
+ source_ocid                = var.source_ocid
+ source_type                = var.source_type
+ ssh_authorized_keys        = var.ssh_authorized_keys
+ assign_public_ip           = var.assign_public_ip
+ subnet_ocids               = [data.terraform_remote_state.vcn.outputs.subnet_wev_ids.web_net_id]
+ block_storage_sizes_in_gbs = var.block_storage_sizes_in_gbs
 }
 
-module "instance_bastion" {
+ module "instance_bastion" {
   source                     = "./modules/compute-instance"
   compartment_ocid           = var.compartment_id
-  ad_number                  = var.instance_ad_number
+  ad_number                  = var.ad_number
   instance_count             = var.instance_count
   instance_display_name      = var.instance_display_name
   shape                      = var.shape
@@ -77,5 +79,5 @@ module "instance_bastion" {
   assign_public_ip           = var.assign_public_ip
   subnet_ocids               = [data.terraform_remote_state.vcn.outputs.subnet_wev_ids.bastion_net_id]
   block_storage_sizes_in_gbs = var.block_storage_sizes_in_gbs
-}
+ }
 

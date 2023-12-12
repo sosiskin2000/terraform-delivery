@@ -14,6 +14,12 @@ variable "api_private_key_path" {
   # no default value, asking user to explicitly set this variable's value. see codingconventions.adoc
 }
 
+variable "public_ip" {
+  description = "Whether to create a Public IP to attach to primary vnic and which lifetime. Valid values are NONE, RESERVED or EPHEMERAL."
+  type        = string
+  default     = "NONE"
+}
+
 variable "region" {
   description = "the oci region where resources will be created"
   type        = string
@@ -52,6 +58,12 @@ variable "compartment_id" {
   description = "compartment id where to create all resources"
   type        = string
   # no default value, asking user to explicitly set this variable's value. see codingconventions.adoc
+}
+
+variable "boot_volume_backup_policy" {
+  description = "Choose between default backup policies : gold, silver, bronze. Use disabled to affect no backup policy on the Boot Volume."
+  type        = string
+  default     = "disabled"
 }
 
 variable "comp_temp" {
@@ -166,7 +178,7 @@ variable "newbits" {
   type = map(any)
 }
 
-variable "instance_ad_number" {
+variable "ad_number" {
   description = "The availability domain number of the instance. If none is provided, it will start with AD-1 and continue in round-robin."
   type        = number
   default     = 1
