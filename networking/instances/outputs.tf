@@ -9,4 +9,3 @@ output "instance_bastion" {
 }
 
 
-

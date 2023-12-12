@@ -9,7 +9,7 @@ user_id              = "ocid1.user.oc1..aaaaaaaanjro5wkf6gurnelsaourcj24zb3swgdh
 
 # general oci parameters
 compartment_id = "ocid1.tenancy.oc1..aaaaaaaakgbcacu75hezk4aovg6q5psc37ezdcwhc4whwri3ow4khb6xbtdq"
-
+boot_volume_backup_policy = "disabled" # gold, silver, bronze, disabled
 comp_temp = "ocid1.compartment.oc1..aaaaaaaaig73yt3xvfshswhpf6puqjsxbsur4kip5fqo6bezzsjcpr4ebmoq"
 compartments = {
   "some_dev_mgmt" = { desc = "compartment for MGMT" },
